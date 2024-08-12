@@ -3,7 +3,7 @@ const { createToDo, updateToDo } = require('./types');
 const { todo } = require('./db');
 const app = express()
 const cors = require('cors')
-
+const PORT = 3000
 app.use(cors())
 app.use(express.json())
 
@@ -67,7 +67,8 @@ app.put('/todo', async (req, res) => {
 
         res.json({
             message: 'Todo updated',
-            id: req.body.id
+            id: req.body.id,
+            data: todos
         });
     } catch (error) {
         res.status(500).json({ message: 'Update failed', error });
@@ -75,10 +76,24 @@ app.put('/todo', async (req, res) => {
 });
 
 
+app.delete('/todo', async (req, res) => {
+    const id = req.body.id;
+    try {
+        const todos = await todo.deleteOne({ _id: id });
+        const todoData = await todo.find();
 
-app.delete('/delete', (req, res) => {
+        res.json({
+            message: 'Todo deleted',
+            id: id,
+            data: todoData
+        });
+    } catch (error) {
+        console.log(error)
+    }
 
 })
 
-app.listen(3000)
+app.listen(PORT, () => {
+    console.log(`Server is running on ${PORT}`)
+})
 
