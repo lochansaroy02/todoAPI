@@ -14,6 +14,8 @@ app.get('/', (req, res) => {
         message: "server is running"
     })
 })
+
+
 app.post('/todo', async (req, res) => {
     const createPayload = req.body;
     const parsePayload = createToDo.safeParse(createPayload)  //zod validation
