@@ -79,19 +79,20 @@ app.put('/todo', async (req, res) => {
 app.delete('/todo', async (req, res) => {
     const id = req.body.id;
     try {
-        const todos = await todo.deleteOne({ _id: id });
-        const todoData = await todo.find();
+        await todo.deleteOne({ _id: id });
+
+        const updatedTodo = await todo.find();
 
         res.json({
-            message: 'Todo deleted',
+            message: 'Todo deleted successfully',
             id: id,
-            data: todoData
+            data: updatedTodo
         });
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        res.status(500).json({ message: 'Failed to delete todo', error });
     }
-
-})
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on ${PORT}`)
